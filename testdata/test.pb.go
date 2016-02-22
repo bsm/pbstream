@@ -25,11 +25,101 @@ var _ = math.Inf
 type Message struct {
 	S string `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
 	N int32  `protobuf:"varint,2,opt,name=n,proto3" json:"n,omitempty"`
+	// Types that are valid to be assigned to V:
+	//	*Message_U
+	//	*Message_B
+	V isMessage_V `protobuf_oneof:"v"`
 }
 
 func (m *Message) Reset()         { *m = Message{} }
 func (m *Message) String() string { return proto.CompactTextString(m) }
 func (*Message) ProtoMessage()    {}
+
+type isMessage_V interface {
+	isMessage_V()
+}
+
+type Message_U struct {
+	U uint32 `protobuf:"fixed32,3,opt,name=u,proto3,oneof"`
+}
+type Message_B struct {
+	B bool `protobuf:"varint,4,opt,name=b,proto3,oneof"`
+}
+
+func (*Message_U) isMessage_V() {}
+func (*Message_B) isMessage_V() {}
+
+func (m *Message) GetV() isMessage_V {
+	if m != nil {
+		return m.V
+	}
+	return nil
+}
+
+func (m *Message) GetU() uint32 {
+	if x, ok := m.GetV().(*Message_U); ok {
+		return x.U
+	}
+	return 0
+}
+
+func (m *Message) GetB() bool {
+	if x, ok := m.GetV().(*Message_B); ok {
+		return x.B
+	}
+	return false
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*Message) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), []interface{}) {
+	return _Message_OneofMarshaler, _Message_OneofUnmarshaler, []interface{}{
+		(*Message_U)(nil),
+		(*Message_B)(nil),
+	}
+}
+
+func _Message_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*Message)
+	// v
+	switch x := m.V.(type) {
+	case *Message_U:
+		_ = b.EncodeVarint(3<<3 | proto.WireFixed32)
+		_ = b.EncodeFixed32(uint64(x.U))
+	case *Message_B:
+		t := uint64(0)
+		if x.B {
+			t = 1
+		}
+		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
+		_ = b.EncodeVarint(t)
+	case nil:
+	default:
+		return fmt.Errorf("Message.V has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _Message_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*Message)
+	switch tag {
+	case 3: // v.u
+		if wire != proto.WireFixed32 {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeFixed32()
+		m.V = &Message_U{uint32(x)}
+		return true, err
+	case 4: // v.b
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.V = &Message_B{x != 0}
+		return true, err
+	default:
+		return false, nil
+	}
+}
 
 func init() {
 	proto.RegisterType((*Message)(nil), "testdata.Message")
