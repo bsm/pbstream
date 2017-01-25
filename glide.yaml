@@ -1,0 +1,8 @@
+package: github.com/bsm/pbstream
+import:
+- package: github.com/gogo/protobuf
+  subpackages:
+  - proto
+testImport:
+- package: github.com/onsi/ginkgo
+- package: github.com/onsi/gomega

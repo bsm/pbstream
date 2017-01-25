@@ -1,0 +1,47 @@
+hash: ee475de3c127919fffc15e1b8b6d7abc6c1efbaf23bc88af4a76cfa6b677d200
+updated: 2017-01-25T11:06:52.584869465Z
+imports:
+- name: github.com/gogo/protobuf
+  version: 265e960d45b331a5055057ef0f29088cf1eb91ce
+  subpackages:
+  - proto
+testImports:
+- name: github.com/onsi/ginkgo
+  version: a23f924ce96d61f963fb6219b8ff069d8d768cc2
+  subpackages:
+  - config
+  - internal/codelocation
+  - internal/containernode
+  - internal/failer
+  - internal/leafnodes
+  - internal/remote
+  - internal/spec
+  - internal/specrunner
+  - internal/suite
+  - internal/testingtproxy
+  - internal/writer
+  - reporters
+  - reporters/stenographer
+  - reporters/stenographer/support/go-colorable
+  - reporters/stenographer/support/go-isatty
+  - types
+- name: github.com/onsi/gomega
+  version: e85f63af4302dc0e4277c6008ecf803f1d80e4f0
+  subpackages:
+  - format
+  - internal/assertion
+  - internal/asyncassertion
+  - internal/oraclematcher
+  - internal/testingtsupport
+  - matchers
+  - matchers/support/goraph/bipartitegraph
+  - matchers/support/goraph/edge
+  - matchers/support/goraph/node
+  - matchers/support/goraph/util
+  - types
+- name: golang.org/x/sys
+  version: d75a52659825e75fff6158388dddc6a5b04f9ba5
+  subpackages:
+  - unix
+- name: gopkg.in/yaml.v2
+  version: 14227de293ca979cf205cd88769fe71ed96a97e2
