@@ -31,7 +31,7 @@ var _ = Describe("pbstream", func() {
 			subject = NewEncoder(buf)
 		})
 
-		It("should enbcode streams", func() {
+		It("should encode streams", func() {
 			Expect(subject.Encode(x1)).NotTo(HaveOccurred())
 			Expect(buf.Len()).To(Equal(6))
 			Expect(subject.Encode(x2)).NotTo(HaveOccurred())

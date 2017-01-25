@@ -22,6 +22,12 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+
 type Message struct {
 	S string `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
 	N int32  `protobuf:"varint,2,opt,name=n,proto3" json:"n,omitempty"`
@@ -31,9 +37,10 @@ type Message struct {
 	V isMessage_V `protobuf_oneof:"v"`
 }
 
-func (m *Message) Reset()         { *m = Message{} }
-func (m *Message) String() string { return proto.CompactTextString(m) }
-func (*Message) ProtoMessage()    {}
+func (m *Message) Reset()                    { *m = Message{} }
+func (m *Message) String() string            { return proto.CompactTextString(m) }
+func (*Message) ProtoMessage()               {}
+func (*Message) Descriptor() ([]byte, []int) { return fileDescriptorTest, []int{0} }
 
 type isMessage_V interface {
 	isMessage_V()
@@ -56,6 +63,20 @@ func (m *Message) GetV() isMessage_V {
 	return nil
 }
 
+func (m *Message) GetS() string {
+	if m != nil {
+		return m.S
+	}
+	return ""
+}
+
+func (m *Message) GetN() int32 {
+	if m != nil {
+		return m.N
+	}
+	return 0
+}
+
 func (m *Message) GetU() uint32 {
 	if x, ok := m.GetV().(*Message_U); ok {
 		return x.U
@@ -71,8 +92,8 @@ func (m *Message) GetB() bool {
 }
 
 // XXX_OneofFuncs is for the internal use of the proto package.
-func (*Message) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), []interface{}) {
-	return _Message_OneofMarshaler, _Message_OneofUnmarshaler, []interface{}{
+func (*Message) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _Message_OneofMarshaler, _Message_OneofUnmarshaler, _Message_OneofSizer, []interface{}{
 		(*Message_U)(nil),
 		(*Message_B)(nil),
 	}
@@ -121,6 +142,37 @@ func _Message_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer
 	}
 }
 
+func _Message_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*Message)
+	// v
+	switch x := m.V.(type) {
+	case *Message_U:
+		n += proto.SizeVarint(3<<3 | proto.WireFixed32)
+		n += 4
+	case *Message_B:
+		n += proto.SizeVarint(4<<3 | proto.WireVarint)
+		n += 1
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 func init() {
 	proto.RegisterType((*Message)(nil), "testdata.Message")
+}
+
+func init() { proto.RegisterFile("testdata/test.proto", fileDescriptorTest) }
+
+var fileDescriptorTest = []byte{
+	// 121 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0x12, 0x2e, 0x49, 0x2d, 0x2e,
+	0x49, 0x49, 0x2c, 0x49, 0xd4, 0x07, 0x31, 0xf4, 0x0a, 0x8a, 0xf2, 0x4b, 0xf2, 0x85, 0x38, 0x60,
+	0x82, 0x4a, 0x5e, 0x5c, 0xec, 0xbe, 0xa9, 0xc5, 0xc5, 0x89, 0xe9, 0xa9, 0x42, 0x3c, 0x5c, 0x8c,
+	0xc5, 0x12, 0x8c, 0x0a, 0x8c, 0x1a, 0x9c, 0x41, 0x8c, 0xc5, 0x20, 0x5e, 0x9e, 0x04, 0x93, 0x02,
+	0xa3, 0x06, 0x6b, 0x10, 0x63, 0x9e, 0x10, 0x1f, 0x17, 0x63, 0xa9, 0x04, 0xb3, 0x02, 0xa3, 0x06,
+	0xbb, 0x07, 0x43, 0x10, 0x63, 0x29, 0x88, 0x9f, 0x24, 0xc1, 0xa2, 0xc0, 0xa8, 0xc1, 0x01, 0xe2,
+	0x27, 0x39, 0x31, 0x73, 0x31, 0x96, 0x25, 0xb1, 0x81, 0x0d, 0x37, 0x06, 0x04, 0x00, 0x00, 0xff,
+	0xff, 0xe8, 0x01, 0x56, 0x6f, 0x73, 0x00, 0x00, 0x00,
 }
