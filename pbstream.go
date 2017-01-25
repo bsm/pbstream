@@ -8,6 +8,9 @@ import (
 	"github.com/gogo/protobuf/proto"
 )
 
+// assert version
+const _ = proto.GoGoProtoPackageIsVersion2
+
 // Decoder can read input streams and decode pb encoded messages
 type Decoder struct {
 	r *bufio.Reader
