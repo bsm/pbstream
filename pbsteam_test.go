@@ -40,6 +40,12 @@ var _ = Describe("pbstream", func() {
 			Expect(buf.Len()).To(Equal(20))
 			Expect(subject.Encode(x5)).NotTo(HaveOccurred())
 			Expect(buf.Len()).To(Equal(38))
+			Expect(buf.Bytes()).To(Equal([]byte{
+				5, 10, 1, 97, 16, 1, 5, 10, 1, 98, 16,
+				2, 7, 10, 1, 100, 16, 4, 32, 1, 17, 10,
+				15, 98, 111, 111, 111, 111, 111, 111,
+				111, 111, 111, 111, 111, 111, 111, 111,
+			}))
 		})
 
 	})

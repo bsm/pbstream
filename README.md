@@ -1,5 +1,9 @@
 # pbstream
 
+**DEPRECATED**: please use `NewDelimitedWriter` and `NewDelimitedReader`
+from [GoGo Protobuf](https://godoc.org/github.com/gogo/protobuf/io)
+instead.
+
 Minimal protobuf streaming encoder and decoder
 
 ### Licence

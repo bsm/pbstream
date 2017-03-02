@@ -1,60 +1,36 @@
 package pbstream
 
 import (
-	"bufio"
-	"encoding/binary"
 	"io"
 
+	pio "github.com/gogo/protobuf/io"
 	"github.com/gogo/protobuf/proto"
 )
 
 // assert version
 const _ = proto.GoGoProtoPackageIsVersion2
 
+// maximum message size
+const maxSize = 16 * 1024 * 1024 // 16M
+
 // Decoder can read input streams and decode pb encoded messages
 type Decoder struct {
-	r *bufio.Reader
+	pio.ReadCloser
 }
 
 // NewDecoder creates a new decoder
-func NewDecoder(r io.Reader) *Decoder { return &Decoder{r: bufio.NewReader(r)} }
+func NewDecoder(r io.Reader) *Decoder { return &Decoder{ReadCloser: pio.NewDelimitedReader(r, maxSize)} }
 
 // Decode decodes the next item into a message
-func (d *Decoder) Decode(pb proto.Message) error {
-	u, err := binary.ReadUvarint(d.r)
-	if err != nil {
-		return err
-	}
-
-	msg := make([]byte, int(u))
-	if _, err := io.ReadFull(d.r, msg); err != nil {
-		if err == io.EOF {
-			err = io.ErrUnexpectedEOF
-		}
-		return err
-	}
-	return proto.Unmarshal(msg, pb)
-}
+func (d *Decoder) Decode(msg proto.Message) error { return d.ReadCloser.ReadMsg(msg) }
 
 // Encoder can write a stream of pb messages to a writer
 type Encoder struct {
-	w io.Writer
+	pio.WriteCloser
 }
 
 // NewEncoder creates a new decoder
-func NewEncoder(w io.Writer) *Encoder { return &Encoder{w: w} }
+func NewEncoder(w io.Writer) *Encoder { return &Encoder{WriteCloser: pio.NewDelimitedWriter(w)} }
 
-// Decode decodes the next item into a message
-func (d *Encoder) Encode(pb proto.Message) error {
-
-	msg, err := proto.Marshal(pb)
-	if err != nil {
-		return err
-	}
-
-	buf := make([]byte, binary.MaxVarintLen64)
-	n := binary.PutUvarint(buf, uint64(len(msg)))
-
-	_, err = d.w.Write(append(buf[:n], msg...))
-	return err
-}
+// Encode encodes a message
+func (d *Encoder) Encode(msg proto.Message) error { return d.WriteMsg(msg) }
